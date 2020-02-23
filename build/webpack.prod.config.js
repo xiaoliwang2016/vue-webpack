@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 // 引入基础配置文件
-const webpackBase = require("./webpack.config.base")
+const webpackBase = require("./webpack.base.config")
 // 引入 webpack-merge 插件
 const webpackMerge = require("webpack-merge")
 var { CleanWebpackPlugin } = require('clean-webpack-plugin')

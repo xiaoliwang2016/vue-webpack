@@ -1,23 +1,15 @@
 <template>
     <div>
-        <home></home>
+        <router-view></router-view>
+        <tab></tab>
     </div>
 </template>
 
 <script>
-import Home from '@/pages/home'
+import Tab from './components/Tab'
 export default {
-    data(){
-        return {
-            text: 'text'
-        }
-    },
     components: {
-        Home
+        Tab
     }
 }
 </script>
-
-<style lang="css">
-    
-</style>

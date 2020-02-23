@@ -3,6 +3,9 @@ var webpack = require('webpack')
 var VueLoaderPlugin = require('vue-loader/lib/plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
+// webpack4.x 中推荐使用 mini-css-extract-plugin 代替 extract-text-webpack-plugin
+var MiniCssExtractPlugin = require("mini-css-extract-plugin")
+
 const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
@@ -27,54 +30,58 @@ module.exports = {
 				test: /\.vue$/,
 				loader: 'vue-loader'
 			},
-			// 它会应用到普通的 `.js` 文件
-			// 以及 `.vue` 文件中的 `<script>` 块
 			{
 				test: /\.js$/,
 				loader: 'babel-loader'
 			},
-			// 它会应用到普通的 `.css` 文件
-			// 以及 `.vue` 文件中的 `<style>` 块
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader']
+				use: [ isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader" ]
 			},
 			{
 				test: /\.less$/,
-				use: ['style-loader', 'css-loader', 'less-loader']
+				use: [ isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "less-loader" ]
 			},
 			{
-				test: /\.(png|svg|jpg|gif)$/,
+				test: /\.(png|jpg|gif|jpeg)$/,
 				use: [
 					{
-						loader: 'file-loader',
-				        options: {
-				            name: '[path][name].[ext]',//path为相对于context的路径
-				            context:'src',
-				            publicPath:function(url){//返回最终的资源相对路径
-				                return path.relative('dist',url).replace(/\\/g,'/');
-				            }
-				        }
+						loader: 'url-loader', 
+						options: {
+							limit: 10000,
+							outputPath: 'img'
+						}
 					}
 				]
 			},
 			{	
-				test: /\.(png|svg|jpg|gif|jpeg|ico|woff|woff2|eot|ttf|otf)$/,
+				test: /\.(ico|woff|woff2|eot|ttf|otf)$/,
 				use: [
 					{
-						loader: 'url-loader', // 根据图片大小，把图片优化成base64
+						loader: 'url-loader', 
 						options: {
-						  limit: 10000
+							limit: 10000,
+							outputPath: 'font'
 						}
 					}
 				]
-			}
+			},
+			{
+				test: /\.svg$/,
+				loader: 'svg-sprite-loader',	/** 使用 vg-sprite-loader 将指定 svg 文件打包成一张 sprite 图 */
+				include: path.resolve(__dirname, '../src/icons'),
+				options: {
+					symbolId: 'icon-[name]'	/** 返回的ID，赋值给 Svg > use 标签中 href  */
+				}
+			},
         ]
 	},
 	
     plugins: [
 		new VueLoaderPlugin(),
-		new HtmlWebpackPlugin({ template: './src/index.html' })
+		new HtmlWebpackPlugin({ template: './src/index.html' }),
+		//抽离CSS
+		new MiniCssExtractPlugin({ filename: "css/style.css" })
 	]
 
 }
