@@ -24,6 +24,13 @@ module.exports = webpackMerge(webpackBase, {
 	devServer: {
 		contentBase: path.join(__dirname, "../dist"),
 		compress: true,
-		port: 9000
+		port: 9000,
+		proxy: {
+			'/api': {
+				target: 'https://mtqcshi.hucai.com/',
+				secure: false,	/** 默认情况下，不接受运行在 HTTPS 上 */
+				pathRewrite: {'^/api' : ''}
+			}
+		}
 	}
 })

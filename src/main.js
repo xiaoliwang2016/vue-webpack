@@ -7,12 +7,14 @@ import VueRouter from 'vue-router'
 import router from './router'
 Vue.use(VueRouter)
 
+import store from './store'
+
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 
-import request from '@/utils/http'
-Vue.prototype.request = request
+import http from '@/utils/http'
+Vue.prototype.$http = http
 
 import '@/assets/css/common.less'
 import './icons'
@@ -20,6 +22,7 @@ import './icons'
 new Vue({
     el: '#app',
     router,
+    store,
     render: h => h(App)
 })
   

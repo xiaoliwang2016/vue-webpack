@@ -43,6 +43,10 @@ module.exports = {
 				use: [ isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "less-loader" ]
 			},
 			{
+				test: /\.scss$/,	/** 需要同时安装 node-sass sass-loader */
+				use: [ isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "sass-loader" ]
+			},
+			{
 				test: /\.(png|jpg|gif|jpeg)$/,
 				use: [
 					{

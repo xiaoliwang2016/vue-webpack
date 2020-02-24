@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Tab from '@/components/Tab'
 import axios from 'axios'
 export default {
     data(){
@@ -15,11 +14,7 @@ export default {
     },
 
     mounted(){
-        this.request('/api/home/swipes')
-    },
-
-    components: {
-        Tab
+        console.log(this.$router)
     }
 }
 </script>
