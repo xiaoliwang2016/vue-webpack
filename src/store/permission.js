@@ -2,10 +2,16 @@ import http from '@/utils/http'
 import { asyncRoutes } from '@/router'
 import router from '@/router'
 
-const filteAsyncRoutes = function(role){
-    var routes = asyncRoutes.filter(route => route.meta.role.includes(role))
-    router.addRoutes(routes)   /** 通过 addRoutes 挂载的路由无法通过 this.$router.options.routes 获取，该变量只能获取静态路由 */
-    return routes
+const filteAsyncRoutes = function(role, routes){
+    var routeArr = []
+    routes.map(item => {
+        if(item.meta && Array.isArray(item.meta.role) && !item.meta.role.includes(role)) return
+        if(Array.isArray(item.children)){
+            item.children = filteAsyncRoutes(role, item.children)
+        }
+        routeArr.push(item)
+    })
+    return routeArr
 }
 
 const mergeRoutes = function(routes){
@@ -35,7 +41,8 @@ const actions = {
             http.post('/login', userInfo).then(res => {
                 if(res.code == 200){
                     commit('updateRole', res.role)
-                    var asyncR = filteAsyncRoutes(res.role) /** */
+                    var asyncR = filteAsyncRoutes(res.role, asyncRoutes) /** */
+                    router.addRoutes(asyncR)   /** 通过 addRoutes 挂载的路由无法通过 this.$router.options.routes 获取，该变量只能获取静态路由 */
                     var routes = mergeRoutes(asyncR)
                     commit('updateRoutes', routes)
                     resolve()

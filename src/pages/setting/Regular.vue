@@ -1,9 +1,9 @@
 <template>
-    <h2>Setting</h2>
+    <h2>常规设置</h2>
 </template>
 
 <script>
 export default{
-    name: 'setting'
+    name: 'regular setting'
 }
 </script>

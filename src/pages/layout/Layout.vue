@@ -12,9 +12,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Menu from '@/components/Menu'
+import Menu from './Menu'
 export default {
+    name: 'Layout',
+
     data(){
         return {
 

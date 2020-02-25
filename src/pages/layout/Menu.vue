@@ -32,15 +32,21 @@
         },
 
         mounted(){
+            /**
+             * 1. 仅保留 component 为 Layout 的路由
+             * 2. 对 hidden 属性为 true 的路由进行过滤
+             */
             function filterRoute(routes){
                 routes = routes.filter(item => {
-                    if(Array.isArray(item.children) && item.hidden === false){
+                    if(Array.isArray(item.children) && item.hidden){
                         item.children = filterRoute(item.children)
                     }
-                    return item.hidden === false
+                    return item.component.name == 'Layout'                    
                 })
                 return routes
             }
+            console.log(this.$store.state.permission.routes);
+            
             this.routes = filterRoute(this.$store.state.permission.routes)
         }
     }

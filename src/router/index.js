@@ -1,13 +1,8 @@
 import VueRouter from 'vue-router'
-import Home from '@/pages/home/Home'
+import Layout from '@/pages/layout/Layout'
 import Login from '@/pages/login/Login'
 
 const routes = [
-
-    { 
-        path: '/',
-        redirect: '/home'
-    },
 
     {
         name: 'login',
@@ -16,9 +11,16 @@ const routes = [
     },
 
     {
-        name: 'home',
-        path: '/home',
-        component: Home
+        path: '/',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [
+            {
+                path: 'dashboard',
+                hidden: true,
+                component: () => import('@/pages/dashboard/Dashboard')
+            }
+        ]
     },
 
     {
@@ -33,25 +35,26 @@ const asyncRoutes = [
     {
         name: 'employee',
         path: '/employee',
-        hidden: false,
+        component: Layout,
         meta: {
             name: '员工管理',
             icon: 'peoples',
             role: ['manager', 'admin']
         },
+        redirect: '/employee/list',
         children: [
             {
-                path: '/list',
+                path: 'list',
                 component: () => import('@/pages/employee/List'),
                 hidden: false,
                 meta: {
                     name: '员工列表',
-                    icon: 'peoples',
+                    icon: 'people',
                     role: ['manager', 'admin']
                 }
             },
             {
-                path: '/detail',
+                path: 'detail',
                 component: () => import('@/pages/employee/Detail'),
                 hidden: false,
                 meta: {
@@ -66,13 +69,35 @@ const asyncRoutes = [
     {
         name: 'setting',
         path: '/setting',
-        component: () => import('@/pages/setting/Setting'),
-        hidden: false,
+        component: Layout,
         meta: {
-            name: '设置',
+            name: '常规设置',
             icon: 'setting',
             role: ['admin']
-        }
+        },
+        redirect: '/setting/regular',
+        children: [
+            {
+                path: 'regular',
+                component: () => import('@/pages/setting/Regular'),
+                hidden: false,
+                meta: {
+                    name: '常规设置',
+                    icon: 'setting',
+                    role: ['admin']
+                }
+            },
+            {
+                path: 'system',
+                component: () => import('@/pages/setting/System'),
+                hidden: false,
+                meta: {
+                    name: '系统',
+                    icon: 'setting',
+                    role: ['admin']
+                }
+            }
+        ]
     }
 
 ]
