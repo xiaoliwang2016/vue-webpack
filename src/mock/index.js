@@ -18,7 +18,8 @@ Mock.mock('/login', 'post', function (config) {
 	return {
 		code: role ? 200 : 500,
 		role,
-		message: role ? '登录成功' : '请重新登录',
+		token: '123456',
+		message: role ? '登录成功' : '请重新登录'
 	}
 })
 

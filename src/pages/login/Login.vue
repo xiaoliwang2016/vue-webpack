@@ -69,7 +69,7 @@ export default {
     methods: {
         handleLogin(){
             this.$store.dispatch('permission/login', this.loginForm).then(res => {
-                this.$router.replace({ name: 'home' })
+                this.$router.push({ name: 'home' })
             }).catch(err => {
                 this.$message.error(err)
             })
