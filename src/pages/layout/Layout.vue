@@ -2,7 +2,7 @@
     <div class="page">
         <el-row class="col">
             <el-col :span="6">
-                <Menu></Menu>
+                <!-- <Menu></Menu> -->
             </el-col>
             <el-col :span="18">
                 <router-view></router-view>

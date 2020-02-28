@@ -9,11 +9,13 @@
             <el-submenu :index="index + ''" v-for="(item, index) in routes" :key="index">
                 <template slot="title">
                     <svg-icon :icon-class="item.meta.icon"></svg-icon>
-                    <span>{{item.meta.name}}</span>
+                    <router-link :to="item.path">{{item.meta.name}}</router-link>
                 </template>
                 <template v-if="item.children">
                     <el-menu-item-group>
-                        <el-menu-item v-for="(subItem, idx) in item.children" :index="index + '-' + idx" :key="idx">{{subItem.meta.name}}</el-menu-item>
+                        <el-menu-item v-for="(subItem, idx) in item.children" :index="index + '-' + idx" :key="idx">
+                            <router-link :to="item.path + '/' + subItem.path">{{subItem.meta.name}}</router-link>
+                        </el-menu-item>
                     </el-menu-item-group>
                 </template>
             </el-submenu>
@@ -36,17 +38,19 @@
              * 1. 仅保留 component 为 Layout 的路由
              * 2. 对 hidden 属性为 true 的路由进行过滤
              */
-            function filterRoute(routes){
+            function filterRoute(routes, isChildren = false){
                 routes = routes.filter(item => {
-                    if(Array.isArray(item.children) && item.hidden){
-                        item.children = filterRoute(item.children)
+                    if((item.component && item.component.name == 'Layout') || isChildren){
+                        if(item.hidden) return false
+                        if(Array.isArray(item.children)){
+                            item.children = filterRoute(item.children, true)
+                        }
+                        return true
                     }
-                    return item.component.name == 'Layout'                    
+                    return false
                 })
                 return routes
             }
-            console.log(this.$store.state.permission.routes);
-            
             this.routes = filterRoute(this.$store.state.permission.routes)
         }
     }

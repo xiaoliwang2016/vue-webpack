@@ -14,10 +14,10 @@ const routes = [
         path: '/',
         component: Layout,
         redirect: '/dashboard',
+        hidden: true,
         children: [
             {
                 path: 'dashboard',
-                hidden: true,
                 component: () => import('@/pages/dashboard/Dashboard')
             }
         ]

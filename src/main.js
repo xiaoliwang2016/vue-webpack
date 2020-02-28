@@ -19,6 +19,16 @@ Vue.prototype.$http = http
 import '@/assets/css/common.less'
 import './icons'
 
+Vue.prototype.$event = new Vue()
+
+Vue.directive('verify', {
+    inserted: function(el, binding){
+        if(binding.value !== 'admin'){
+            el.parentElement.removeChild(el)    /** 在bind中el.parentElement为null，因为此时dom还没有插入 */
+        }
+    }
+})
+
 new Vue({
     el: '#app',
     router,
